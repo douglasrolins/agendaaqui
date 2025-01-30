@@ -1,0 +1,79 @@
+/* Estilos personalizados */
+body {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+header {
+    background-color: #fff;
+    /* Fundo branco */
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+header img.logo-header {
+    width: 500px;
+    /* Tamanho da logo */
+    max-width: 100%;
+    /* Garante que a logo não ultrapasse a largura da página */
+    height: auto;
+    /* Mantém a proporção da imagem */
+    margin-bottom: 20px;
+    /* Espaçamento entre a imagem e o texto */
+}
+
+header .lead {
+    color: #0d6efd;
+    /* Azul primário para o texto */
+    font-size: 1.5rem;
+}
+
+.navbar {
+    background-color: #0d6efd;
+    /* Azul primário */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link {
+    color: #fff !important;
+    /* Texto branco no menu */
+}
+
+section {
+    padding: 60px 0;
+}
+
+.funcionalidade-item {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.funcionalidade-item:hover {
+    transform: translateY(-10px);
+}
+
+footer {
+    background-color: #0d6efd;
+    /* Azul primário */
+    color: #fff;
+    padding: 20px 0;
+}
+
+/* Ajustes para dispositivos móveis */
+@media (max-width: 768px) {
+    header img.logo-header {
+        width: 80%;
+        /* Reduz o tamanho da logo em dispositivos móveis */
+    }
+
+    header .lead {
+        font-size: 1.2rem;
+        /* Reduz o tamanho do texto em dispositivos móveis */
+    }
+}

@@ -31,6 +31,14 @@ class ClienteView
         ";
     } 
 
+    function listarClientes(){
+
+
+        echo "<br>Lista de Clientes<br>";
+    }
+
+
+
 
 }
 

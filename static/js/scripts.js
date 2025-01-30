@@ -1,0 +1,1 @@
+// JavaScript personalizado (pode ser usado para interações futuras)

@@ -25,15 +25,24 @@ class ClienteControl
         {
             switch ($action) {
                 case 'listar':
+                    $view = new ClienteView();
+                    $view->listarClientes();
+                    break;
 
                 case 'novo':
                     // Exibir formulário de cadastro do cliente
                     $view = new ClienteView();
                     $view->exibirFormularioCadastro();
 
+                    break;
+
                 case 'atualizar':
 
+                    break;
+
                 case 'apagar':
+
+                    break;
 
 
             }
