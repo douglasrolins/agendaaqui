@@ -1,4 +1,8 @@
 <?php
+
+// Inicia a sessão no início de todas as páginas
+session_start();
+
 //Exibir o header
 include_once 'static/header.php';
 

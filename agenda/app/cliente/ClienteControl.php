@@ -1,6 +1,7 @@
 <?php
 
 include_once __DIR__ . '/ClienteView.php';
+include_once __DIR__ . '/Cliente.php';
 
 class ClienteControl
 {
@@ -15,14 +16,35 @@ class ClienteControl
 
             switch ($action) {
                 case 'cadastrar':
+                    $nome = $params['nome'];
+                    $telefone = $params['telefone'];
+                    $email = $params['email'];
+                    $senha = $params['senha'];
+
+                    $cliente = new Cliente(null, $nome, $telefone, $email, $senha);
+
+                    if ($cliente->cadastrar()) {
+                        $_SESSION['message'] = [
+                            'text' => 'Seu cadastro foi realizado com sucesso.',
+                            'type' => 'success'
+                        ];
+                        echo "Seu cadastro foi realizado com sucesso";
+                    } else {
+                        $_SESSION['message'] = [
+                            'text' => 'Ocorreu um erro ao cadastrar a empresa.',
+                            'type' => 'error'
+                        ];
+                        echo "Ocorreu erro ao realizar seu cadastro";
+                    }
+
+                    header('Location: ?control=index');
+                    exit(); // Garante que o redirecionamento ocorra e o script não continue
+                    break;
 
 
                 case 'atualizar':
-                    
             }
-        }
-        else
-        {
+        } else {
             switch ($action) {
                 case 'listar':
                     $view = new ClienteView();
@@ -33,7 +55,6 @@ class ClienteControl
                     // Exibir formulário de cadastro do cliente
                     $view = new ClienteView();
                     $view->exibirFormularioCadastro();
-
                     break;
 
                 case 'atualizar':
@@ -43,10 +64,7 @@ class ClienteControl
                 case 'apagar':
 
                     break;
-
-
             }
-
         }
     }
 }
