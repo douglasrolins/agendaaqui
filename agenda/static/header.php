@@ -10,7 +10,7 @@
     <!-- Bootstrap CSS -->
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
     <!-- CSS Personalizado -->
-    <link rel='stylesheet' href='../static/css/styles.css'>
+    <link rel='stylesheet' href='<?= BASE_URL ?>static/css/styles.css'>
 
     <title>AgendaAqui - Agendamento de Serviços</title>
 </head>
@@ -18,8 +18,8 @@
 <body>
     <header>
         <div style="place-items: center; display: grid;">
-            <a href="#">
-                <img src="static\img\logo_app.png" alt="Logo App" width="300px">
+            <a href="<?= BASE_URL ?>">
+                <img src="<?= BASE_URL ?>static/img/logo_app.png" alt="Logo App" width="300px">
             </a>
             <!-- menu de navegação -->
             <!-- 

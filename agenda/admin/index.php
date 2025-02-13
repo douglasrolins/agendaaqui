@@ -4,10 +4,10 @@
 session_start();
 
 // Inclui configurações da aplicação
-include_once 'config/appconfig.php';
+include_once '../config/appconfig.php';
 
 //Exibir o header
-include_once 'static/header.php';
+include_once  '../static/header.php';
 
 // Aciona controlador
 
@@ -19,8 +19,9 @@ $controlClass = ucfirst($control) . 'Control';
 
 function loadControl($control, $controlClass)
 {
+    
+    $file = __DIR__ ."/" . $control . '/' .  $controlClass . '.php';
 
-    $file = __DIR__ . '/app/' . $control . '/' .  $controlClass . '.php';
     if (file_exists($file)) {
         include_once $file;
     } else {
@@ -44,4 +45,4 @@ if (class_exists($controlClass)) {
 
 
 //Exibir o footer
-include_once 'static/footer.php';
+include_once '../static/footer.php';
