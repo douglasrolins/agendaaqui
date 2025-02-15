@@ -25,19 +25,18 @@ class ClienteControl
 
                     if ($cliente->cadastrar()) {
                         $_SESSION['message'] = [
-                            'text' => 'Seu cadastro foi realizado com sucesso.',
+                            'text' => 'Seu cadastro foi realizado com sucesso. Efetue o login',
                             'type' => 'success'
                         ];
-                        echo "Seu cadastro foi realizado com sucesso";
+                        header('Location: ?control=login');
                     } else {
                         $_SESSION['message'] = [
-                            'text' => 'Ocorreu um erro ao cadastrar a empresa.',
+                            'text' => 'Ocorreu um erro ao realizar seu cadastro.',
                             'type' => 'error'
                         ];
-                        echo "Ocorreu erro ao realizar seu cadastro";
+                        header('Location: ?control=cliente&action=cadastrar');
                     }
 
-                    header('Location: ?control=index');
                     exit(); // Garante que o redirecionamento ocorra e o script não continue
                     break;
 

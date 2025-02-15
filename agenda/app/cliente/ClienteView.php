@@ -29,6 +29,10 @@ class ClienteView
                     <div class='col-12'>
                         <button type='submit' class='btn btn-primary w-100'>Enviar</button>
                     </div>
+
+                    <div class='mt-3 text-center'>
+                        <p>Já possui conta? <a href='?control=login'>Faça login</a></p>
+                    </div>
                 </form>
             </div>
         </div>

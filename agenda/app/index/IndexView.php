@@ -26,20 +26,53 @@ class IndexView
             <div class='container mt-5'>
                 <div class='row justify-content-center'>
                     <div class='col-md-6 text-center'>
-                        <h1 class='mb-4'>Bem-vindo ao AgendaAqui</h1>
-                        <p class='lead mb-4'>Escolha uma opção para continuar:</p>
             ";
 
 
         if (isset($_SESSION['user_id'])) {
+            echo "<h5 class='mb-4'>Seja bem vindo " . explode(' ', $_SESSION['user_name'])[0] ."</h5>";
+           
             echo " <!-- Botão para acessar a lista de serviços -->
-                        <a href='index.php?control=servicos&action=listar' class='btn btn-primary btn-lg btn-block mb-3'>
-                            Acessar Lista de Serviços
+                        <a href='index.php?control=agendamento&action=listarServicos' class='btn btn-primary btn-lg btn-block mb-3'>
+                            Realizar novo Agendamento
                         </a>
                         
-                        <a href='index.php?control=login&action=logout' class='btn btn-primary btn-lg btn-block mb-3'>
+                        <a href='index.php?control=login&action=logout' class='btn btn-secondary btn-lg btn-block mb-3'>
                             Sair
                         </a>";
+
+            echo '
+                        <!-- Próximos Agendamentos -->
+                        <div class="mt-4">
+                            <h5>Próximos Agendamentos (exemplos)</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Serviço</th>
+                                        <th>Horário</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Exemplo de agendamento (esses dados seriam dinâmicos no futuro) -->
+                                    <tr>
+                                        <td>25/02/2025</td>
+                                        <td>Manutenção de Equipamento</td>
+                                        <td>10:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>27/02/2025</td>
+                                        <td>Consulta de Diagnóstico</td>
+                                        <td>14:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>28/02/2025</td>
+                                        <td>Limpeza de Equipamento</td>
+                                        <td>16:00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>';
         } else {
             echo " <!-- Botão para realizar auto cadastro -->
                         <a href='index.php?control=cliente&action=novo' class='btn btn-success btn-lg btn-block mb-3'>
@@ -51,15 +84,5 @@ class IndexView
                             Fazer login
                         </a>";
         }
-
-        echo "
-               <!-- Botão para acessar a página de administração -->
-                <a href='admin/' class='btn btn-secondary btn-lg btn-block'>
-                    Acessar Página de Administração
-                </a>
-                </div>
-            </div>
-        </div>
-        ";
     }
 }

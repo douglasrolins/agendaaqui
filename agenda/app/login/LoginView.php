@@ -8,6 +8,21 @@ class LoginView
         echo '<div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">';
         echo '<h2 class="text-center">Login</h2>';
 
+        if (isset($_SESSION['message'])) {
+            $message = $_SESSION['message']['text'];
+            $messageType = $_SESSION['message']['type'];
+
+            // Mapeando o tipo da mensagem para as classes do Bootstrap
+            $alertClass = ($messageType == 'success') ? 'alert-success' : 'alert-danger';
+
+            echo "<div class='container mt-3'>";
+            echo "<div class='alert $alertClass text-center' role='alert'>$message</div>";
+            echo "</div>";
+
+            // Limpa a mensagem após exibi-la
+            unset($_SESSION['message']);
+        }
+
         // Exibe mensagem de erro se houver
         if ($errorMessage) {
             echo '<div class="alert alert-danger text-center">' . htmlspecialchars($errorMessage) . '</div>';
@@ -26,6 +41,12 @@ class LoginView
         echo '</div>';
 
         echo '<button type="submit" class="btn btn-primary w-100">Entrar</button>';
+
+        echo '<div class="mt-3 text-center">';
+        echo '<p>Ainda não tem conta? <a href="?control=cliente&action=novo">Cadastre-se</a></p>';
+        echo '<p><a href="#">Esqueci minha senha!</a></p>';
+        echo '</div>';
+
         echo '</form>';
         echo '</div>';
         echo '</div>';

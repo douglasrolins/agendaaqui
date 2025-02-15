@@ -83,9 +83,12 @@ class Cliente
         $db = new Database();
         $conn = $db->connect();
 
+        // Gerar hash para a senha
+        $hashedSenha = password_hash($this->senha, PASSWORD_DEFAULT);
+
         // Salvar o cliente no banco de dados
         $stmt = $conn->prepare("INSERT INTO cliente (nome,telefone,email,senha) VALUES (?,?,?,?)");
-        $stmt->bind_param("ssss", $this->nome, $this->telefone, $this->email, $this->senha);
+        $stmt->bind_param("ssss", $this->nome, $this->telefone, $this->email, $hashedSenha);
 
         if ($stmt->execute()) {
             $stmt->close();

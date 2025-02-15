@@ -26,8 +26,8 @@ class IndexView
             <div class='container mt-5'>
                 <div class='row justify-content-center'>
                     <div class='col-md-6 text-center'>
-                        <h1 class='mb-4'>Administração do AgendaAqui</h1>
-                        <p class='lead mb-4'>Escolha uma opção para continuar:</p>
+                        <h3 class='mb-4'>Administração do AgendaAqui</h3>
+                        <p>Escolha uma opção para continuar:</p>
             ";
 
 
@@ -41,13 +41,28 @@ class IndexView
                             Sair
                         </a>";
         } else {
-            echo " 
-                         <!-- Botão para realiar login -->
-                        <a href='index.php?control=login' class='btn btn-primary btn-lg btn-block mb-3'>
-                            Fazer login
-                        </a>
+
+            // echo " 
+            //              <!-- Botão para realiar login -->
+            //             <a href='index.php?control=login' class='btn btn-primary btn-lg btn-block mb-3'>
+            //                 Fazer login
+            //             </a>";
+
+            echo "
                         <a href='index.php?control=servico&action=listar' class='btn btn-primary btn-lg btn-block mb-3'>
                             Gerenciar Serviços
+                        </a>
+
+                        <a href='#' class='btn btn-success btn-lg btn-block mb-3'>
+                            Gerenciar Funcionários
+                        </a>
+
+                        <a href='#' class='btn btn-warning btn-lg btn-block mb-3'>
+                            Gerenciar Agenda
+                        </a>
+
+                        <a href='#' class='btn btn-secondary btn-lg btn-block mb-3'>
+                            Emitir Relatórios
                         </a>
                         
                         
