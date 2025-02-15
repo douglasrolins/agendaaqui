@@ -31,16 +31,28 @@ header .lead {
     font-size: 1.5rem;
 }
 
+/* Atualização no estilo da navbar */
 .navbar {
-    background-color: #0d6efd;
-    /* Azul primário */
+    background-color: #0d6efd; /* Azul primário */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.navbar .navbar-brand,
+.navbar .navbar-brand {
+    color: #000000 !important; /* Logo em branco */
+}
+
 .navbar .nav-link {
-    color: #fff !important;
-    /* Texto branco no menu */
+    color: #000000 !important; /* Texto branco no menu */
+}
+
+/* Mudança de cor ao passar o mouse sobre o link */
+.navbar .nav-link:hover {
+    color: #0d6efd !important; /* Cor de destaque (dourado) ao passar o mouse */
+}
+
+/* Cor ao clicar no link */
+.navbar .nav-link:active {
+    color: #003366 !important; /* Cor escura ao clicar */
 }
 
 section {
@@ -59,10 +71,22 @@ section {
 }
 
 footer {
-    background-color: #d6e1f0;
-    color: #000000;
-    padding-top: 5px;
+    background-color: #0d6efd;
+    color: #ffffff;
+    padding-top: 25px;
     padding-bottom: 0px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+footer a {
+    color: #ffffff;  /* Garantir que os links fiquem brancos */
+    text-decoration: none;  /* Remover o sublinhado nos links */
+}
+
+footer a:hover {
+    text-decoration: underline;  /* Adicionar sublinhado no hover */
 }
 
 /* Ajustes para dispositivos móveis */

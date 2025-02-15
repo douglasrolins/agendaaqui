@@ -116,11 +116,53 @@
     </section>
 
     <!-- Rodapé -->
-    <footer class="bg-primary text-white text-center py-4">
-        <div class="container">
-            <p>&copy; 2025 AgendaAqui. Todos os direitos reservados.</p>
+    <!-- </main>
+<br><br>
+<footer>
+    <p style="text-align: center;">&copy; <?php echo date('Y'); ?> AgendaAqui - Todos os direitos reservados</p>
+</footer>
+</body>
+
+</html> -->
+
+
+</main>
+<br><br>
+<footer>
+    <div class="container">
+        <div class="row">
+            <!-- Fale Conosco (alinhado à esquerda) -->
+            <div class="col-md-6">
+                <h5>Fale Conosco</h5>
+                <ul class="list-unstyled">
+                    <li><strong>Comercial:</strong> 0800-0800-0800</li>
+                    <li><strong>Administração:</strong> (62) 6262-6262</li>
+                    <li><strong>Suporte:</strong> (62) 1212-1212</li>
+                </ul>
+            </div>
+
+            <!-- Informações (alinhado à direita) -->
+            <div class="col-md-6 text-right">
+                <h5>Informações</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#">Quem somos</a></li>
+                    <li><a href="#">Dúvidas Frequentes</a></li>
+                    <li><a href="#">Políticas de privacidade</a></li>
+                </ul>
+            </div>
         </div>
-    </footer>
+
+        <div class="row">
+            <!-- Direitos Autorais Centralizados -->
+            <div class="col-12 text-center mt-3">
+                <p>&copy; 2025 AgendaAqui. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
 
     <!-- Bootstrap JS e Dependências -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

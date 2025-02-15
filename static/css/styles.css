@@ -60,9 +60,21 @@ section {
 
 footer {
     background-color: #0d6efd;
-    /* Azul primário */
-    color: #fff;
-    padding: 20px 0;
+    color: #ffffff;
+    padding-top: 25px;
+    padding-bottom: 0px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+footer a {
+    color: #ffffff;  /* Garantir que os links fiquem brancos */
+    text-decoration: none;  /* Remover o sublinhado nos links */
+}
+
+footer a:hover {
+    text-decoration: underline;  /* Adicionar sublinhado no hover */
 }
 
 /* Ajustes para dispositivos móveis */
