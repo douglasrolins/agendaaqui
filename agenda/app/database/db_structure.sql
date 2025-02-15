@@ -7,15 +7,6 @@ CREATE TABLE cliente (
     senha VARCHAR(255) NOT NULL
 );
 
--- Tabela servico
-CREATE TABLE servico (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    descricao TEXT,
-    preco DECIMAL(10, 2) NOT NULL,
-    duracao TIME NOT NULL
-);
-
 -- Tabela empresa
 CREATE TABLE empresa (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -23,6 +14,18 @@ CREATE TABLE empresa (
     cnpj VARCHAR(18) UNIQUE NOT NULL,
     telefone VARCHAR(15),
     email VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- Tabela servico
+CREATE TABLE servico (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10, 2) NOT NULL,
+    duracao INT NOT NULL,
+    logo VARCHAR(200),
+    empresa_id BIGINT,
+    FOREIGN KEY (empresa_id) REFERENCES empresa(id)
 );
 
 -- Tabela funcionario

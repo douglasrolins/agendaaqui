@@ -12,7 +12,7 @@ class Servico
     private $logo;
     private $empresa_id;
 
-    public function __construct($id, $nome, $descricao, $preco, $duracao, $logo, $empresa_id)
+    public function __construct($id, $nome, $descricao, $preco, $duracao, $logo, $empresa_id = null)
     {
         $this->id = $id;
         $this->nome = $nome;
@@ -102,7 +102,7 @@ class Servico
         $conn = $db->connect();
 
         $stmt = $conn->prepare("INSERT INTO servico (nome, descricao, preco, duracao, logo, empresa_id) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssddsi", $this->nome, $this->descricao, $this->preco, $this->duracao, $this->logo, $this->empresa_id);
+        $stmt->bind_param("ssdisi", $this->nome, $this->descricao, $this->preco, $this->duracao, $this->logo, $this->empresa_id);
 
         if ($stmt->execute()) {
             $stmt->close();
@@ -122,7 +122,7 @@ class Servico
         $conn = $db->connect();
 
         $stmt = $conn->prepare("UPDATE servico SET nome = ?, descricao = ?, preco = ?, duracao = ?, logo = ?, empresa_id = ? WHERE id = ?");
-        $stmt->bind_param("ssddsii", $this->nome, $this->descricao, $this->preco, $this->duracao, $this->logo, $this->empresa_id, $this->id);
+        $stmt->bind_param("ssdisii", $this->nome, $this->descricao, $this->preco, $this->duracao, $this->logo, $this->empresa_id, $this->id);
 
         if ($stmt->execute()) {
             $stmt->close();
