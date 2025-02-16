@@ -37,6 +37,11 @@ class LoginControl
                 $_SESSION['user_id'] = $cliente->getId();
                 $_SESSION['user_name'] = $cliente->getNome();
 
+                $_SESSION['message'] = [
+                    'text' => 'Bem vindo '. explode(' ', $_SESSION['user_name'])[0],
+                    'type' => 'success'
+                ];
+
                 // Redireciona para a página inicial ou outra protegida
                 header('Location: '. BASE_URL . '/agenda');
                 exit();

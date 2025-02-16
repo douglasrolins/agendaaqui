@@ -47,9 +47,11 @@
                         <?php if (isset($_SESSION['user_name'])): ?>
                             <?php $primeiroNome = explode(' ', $_SESSION['user_name'])[0]; ?>
                             <!-- Dropdown do Usuário -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <?= htmlspecialchars($primeiroNome) ?>
+                            <li class="nav-item dropdown d-flex align-items-center">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <!-- Ícone de usuário circular -->
+                                    <i class="bi bi-person-circle me-2" style="font-size: 1.3rem; line-height: 1;"></i>
+                                    <span><?= htmlspecialchars($primeiroNome) ?></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                     <li><a class="dropdown-item" href="#">Modificar Perfil</a></li>
@@ -57,6 +59,7 @@
                                 </ul>
                             </li>
                         <?php endif; ?>
+
 
                     </ul>
                 </div>
