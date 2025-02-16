@@ -1,5 +1,5 @@
 <?php
 
-define('BASE_URL', '/agendaaqui/agenda/');
+define('BASE_URL', '/agendaaqui');
 
 ?>

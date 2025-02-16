@@ -86,7 +86,7 @@ class ServicoView
                 echo "<tr>";
                 echo "<td>{$servico->getNome()}</td>";
                 echo "<td>{$servico->getDescricao()}</td>";
-                echo "<td><img src='" . BASE_URL . "static/img/servicos/{$servico->getLogo()}' width='30px'></td>";
+                echo "<td><img src='" . BASE_URL . "/agenda/static/img/servicos/{$servico->getLogo()}' width='30px'></td>";
                 echo "<td>R$ " . number_format($servico->getPreco(), 2, ',', '.') . "</td>";
                 echo "<td>{$servico->getDuracao()} min</td>";
                 // echo "<td>{$servico->getEmpresaId()}</td>";
@@ -123,7 +123,7 @@ class ServicoView
 
                     <div class='mb-3'>
                         <label for='logo_atual' class='form-label'>Logo Atual:</label><br>
-                        <img src='" . BASE_URL . "static/img/servicos/{$servico->getLogo()}' width='50px'>
+                        <img src='" . BASE_URL . "/agenda/static/img/servicos/{$servico->getLogo()}' width='50px'>
                         <input type='hidden' id='logo_atual' name='logo_atual' value='{$servico->getLogo()}'>
                     </div>
 

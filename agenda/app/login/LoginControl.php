@@ -38,7 +38,7 @@ class LoginControl
                 $_SESSION['user_name'] = $cliente->getNome();
 
                 // Redireciona para a página inicial ou outra protegida
-                header('Location: /agendaaqui/agenda');
+                header('Location: '. BASE_URL . '/agenda');
                 exit();
             } else {
                 // Exibe o formulário de login com mensagem de erro
@@ -54,7 +54,7 @@ class LoginControl
     {
         //session_start();
         session_destroy();
-        header('Location: index.php');
+        header('Location: '. BASE_URL . '/agenda');
         exit();
     }
 

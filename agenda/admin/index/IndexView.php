@@ -26,8 +26,7 @@ class IndexView
             <div class='container mt-5'>
                 <div class='row justify-content-center'>
                     <div class='col-md-6 text-center'>
-                        <h3 class='mb-4'>Administração do AgendaAqui</h3>
-                        <p>Escolha uma opção para continuar:</p>
+                        <h4 class='mb-4'>Administração do AgendaAqui</h4>
             ";
 
 

@@ -83,6 +83,21 @@ class Cliente
         $db = new Database();
         $conn = $db->connect();
 
+        // Verificar se o e-mail já está cadastrado
+        $stmt = $conn->prepare("SELECT id FROM cliente WHERE email = ?");
+        $stmt->bind_param("s", $this->email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            // E-mail já cadastrado
+            $stmt->close();
+            $db->closeConnection();
+            return "email_existente";
+        }
+
+        $stmt->close();
+
         // Gerar hash para a senha
         $hashedSenha = password_hash($this->senha, PASSWORD_DEFAULT);
 
@@ -119,7 +134,7 @@ class Cliente
 
         if ($user = $result->fetch_assoc()) {
             //if ($senha == $user['senha']) {
-                // Verifica a senha criptografada
+            // Verifica a senha criptografada
             if (password_verify($senha, $user['senha'])) {
                 // Autenticação bem-sucedida
                 $conn->close();

@@ -26,15 +26,16 @@ class IndexView
             <div class='container mt-5'>
                 <div class='row justify-content-center'>
                     <div class='col-md-6 text-center'>
+
             ";
 
 
         if (isset($_SESSION['user_id'])) {
-            echo "<h5 class='mb-4'>Seja bem vindo " . explode(' ', $_SESSION['user_name'])[0] ."</h5>";
+            echo "<h5 class='mb-4'>Seja bem vindo, " . explode(' ', $_SESSION['user_name'])[0] ."</h5>";
            
             echo " <!-- Botão para acessar a lista de serviços -->
                         <a href='index.php?control=agendamento&action=listarServicos' class='btn btn-primary btn-lg btn-block mb-3'>
-                            Realizar novo Agendamento
+                            Realizar Novo Agendamento
                         </a>
                         
                         <a href='index.php?control=login&action=logout' class='btn btn-secondary btn-lg btn-block mb-3'>

@@ -23,10 +23,18 @@ class ClienteControl
 
                     $cliente = new Cliente(null, $nome, $telefone, $email, $senha);
 
-                    if ($cliente->cadastrar()) {
+                    $resultado = $cliente->cadastrar();
+
+                    if ($resultado === true) {
                         $_SESSION['message'] = [
-                            'text' => 'Seu cadastro foi realizado com sucesso. Efetue o login',
+                            'text' => 'Seu cadastro foi realizado com sucesso. Efetue o login.',
                             'type' => 'success'
+                        ];
+                        header('Location: ?control=login');
+                    } elseif ($resultado === "email_existente") {
+                        $_SESSION['message'] = [
+                            'text' => 'Já tem uma conta com este e-mail, faça login.',
+                            'type' => 'error'
                         ];
                         header('Location: ?control=login');
                     } else {
