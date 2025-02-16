@@ -52,7 +52,7 @@ class IndexView
                             Gerenciar Serviços
                         </a>
 
-                        <a href='#' class='btn btn-info btn-lg btn-block mb-3'>
+                        <a href='index.php?control=agendamentoAdmin&action=listar' class='btn btn-info btn-lg btn-block mb-3'>
                             Ver Agendamentos
                         </a>
 

@@ -20,7 +20,7 @@ $controlClass = ucfirst($control) . 'Control';
 function loadControl($control, $controlClass)
 {
     
-    $file = __DIR__ ."/" . $control . '/' .  $controlClass . '.php';
+    $file = __DIR__ ."/" . strtolower($control) . '/' .  $controlClass . '.php';
 
     if (file_exists($file)) {
         include_once $file;

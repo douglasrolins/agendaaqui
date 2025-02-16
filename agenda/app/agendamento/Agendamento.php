@@ -223,17 +223,60 @@ class Agendamento
         return $agendamentos;
     }
 
-    // Obter todos os agendamentos
-    public static function getAll()
+    // Obter todos os agendamentos como objetos Agendamento (com filtros se aplicado)
+    public static function getAll($filtros = [])
     {
         $db = new Database();
         $conn = $db->connect();
 
-        $query = "SELECT * FROM agendamento";
-        $result = $conn->query($query);
-        $agendamentos = $result->fetch_all(MYSQLI_ASSOC);
+        $query = "SELECT * FROM agendamento WHERE 1=1";
+        $params = [];
 
+        if (!empty($filtros['status'])) {
+            $query .= " AND status = ?";
+            $params[] = $filtros['status'];
+        }
+
+        if (!empty($filtros['data_inicio']) && !empty($filtros['data_fim'])) {
+            $query .= " AND DATE(data_hora_inicio) BETWEEN ? AND ?";
+            $params[] = $filtros['data_inicio'];
+            $params[] = $filtros['data_fim'];
+        } elseif (!empty($filtros['data_inicio'])) {
+            $query .= " AND DATE(data_hora_inicio) >= ?";
+            $params[] = $filtros['data_inicio'];
+        } elseif (!empty($filtros['data_fim'])) {
+            $query .= " AND DATE(data_hora_inicio) <= ?";
+            $params[] = $filtros['data_fim'];
+        }
+
+        $query .= " ORDER BY data_hora_inicio ASC";
+
+        $stmt = $conn->prepare($query);
+
+        if (!empty($params)) {
+            $stmt->bind_param(str_repeat('s', count($params)), ...$params);
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $agendamentos = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $agendamentos[] = new Agendamento(
+                $row['id'],
+                $row['data_hora_inicio'],
+                $row['data_hora_final'],
+                $row['tipo'],
+                $row['cliente_id'],
+                $row['servico_id'],
+                $row['funcionario_id'],
+                $row['status']
+            );
+        }
+
+        $stmt->close();
         $db->closeConnection();
+
         return $agendamentos;
     }
 
@@ -266,5 +309,38 @@ class Agendamento
         }
 
         return null; // Retorna null caso o agendamento não seja encontrado
+    }
+    public function getClienteNome()
+    {
+        $db = new Database();
+        $conn = $db->connect();
+
+        $query = "SELECT nome FROM cliente WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $this->cliente_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        $db->closeConnection();
+
+        return $row ? $row['nome'] : 'Desconhecido';
+    }
+
+    public function getServicoNome()
+    {
+        $db = new Database();
+        $conn = $db->connect();
+
+        $query = "SELECT nome FROM servico WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $this->servico_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        $db->closeConnection();
+
+        return $row ? $row['nome'] : 'Serviço desconhecido';
     }
 }
