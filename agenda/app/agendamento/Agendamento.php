@@ -149,6 +149,26 @@ class Agendamento
         }
     }
 
+    // Cancelar um agendamento 'mudar status para cancelado'
+    public function cancelar()
+    {
+        $db = new Database();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare("UPDATE agendamento SET status = 'cancelado' WHERE id = ?");
+        $stmt->bind_param("i", $this->id);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            $db->closeConnection();
+            return true;
+        } else {
+            $stmt->close();
+            $db->closeConnection();
+            return false;
+        }
+    }
+
     // Apagar um agendamento
     public function apagar()
     {
@@ -175,7 +195,8 @@ class Agendamento
         $db = new Database();
         $conn = $db->connect();
 
-        $stmt = $conn->prepare("SELECT * FROM agendamento WHERE cliente_id = ?");
+        $stmt = $conn->prepare("SELECT * FROM agendamento WHERE cliente_id = ? 
+                            ORDER BY data_hora_inicio DESC ");
         $stmt->bind_param("i", $cliente_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -230,6 +251,20 @@ class Agendamento
 
         $stmt->close();
         $db->closeConnection();
-        return $agendamento;
+
+        if ($agendamento) {
+            return new Agendamento(
+                $agendamento['id'],
+                $agendamento['data_hora_inicio'],
+                $agendamento['data_hora_final'],
+                $agendamento['tipo'],
+                $agendamento['cliente_id'],
+                $agendamento['servico_id'],
+                $agendamento['funcionario_id'],
+                $agendamento['status']
+            );
+        }
+
+        return null; // Retorna null caso o agendamento não seja encontrado
     }
 }

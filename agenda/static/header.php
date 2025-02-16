@@ -8,13 +8,13 @@
     <!-- Bootstrap CSS -->
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
 
-     <!-- Bootstrap JS (incluindo popper e bundle) -->
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS (incluindo popper e bundle) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-     <!-- ìcones bootstrap -->
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    
-     <!-- CSS Personalizado -->
+    <!-- ìcones bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- CSS Personalizado -->
     <link rel='stylesheet' href='<?= BASE_URL ?>/agenda/static/css/styles.css'>
 
     <!-- Javascript -->
@@ -26,7 +26,6 @@
 <body class="d-flex flex-column min-vh-100">
 
     <header>
-        <!-- Navbar com fundo azul e texto branco -->
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
             <div class="container-fluid">
                 <a class="navbar-brand" href="<?= BASE_URL ?>/agenda/">
@@ -44,19 +43,25 @@
                         <li class="nav-item">
                             <a class="nav-link" href="<?= BASE_URL ?>/agenda/admin">Administração</a>
                         </li>
+
+                        <?php if (isset($_SESSION['user_name'])): ?>
+                            <?php $primeiroNome = explode(' ', $_SESSION['user_name'])[0]; ?>
+                            <!-- Dropdown do Usuário -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <?= htmlspecialchars($primeiroNome) ?>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="#">Modificar Perfil</a></li>
+                                    <li><a class="dropdown-item" href="index.php?control=login&action=logout">Sair</a></li>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
+
                     </ul>
                 </div>
             </div>
         </nav>
-
-        <!-- Breadcrumbs -->
-        <!-- <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/agenda">Início</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Página Atual</li>
-            </ol>
-        </nav> -->
     </header>
 
     <main class="flex-grow-1">
- 

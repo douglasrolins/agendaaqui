@@ -101,6 +101,35 @@ class AgendamentoControl
                     }
                     break;
 
+                case 'cancelar':
+
+                    $agendamento = Agendamento::getById($params['agendamento_id']);
+
+                    // Valida se o agendamento pertence ao cliente conectado
+                    if ($_SESSION['user_id'] == $agendamento->getClienteId()) {
+
+                        // Cancelar o agendamento
+                        if ($agendamento->cancelar()) {
+                            $_SESSION['message'] = [
+                                'text' => 'Agendamento cancelado com sucesso!',
+                                'type' => 'success'
+                            ];
+                            header('Location: index.php');
+                        } else {
+                            $_SESSION['message'] = [
+                                'text' => 'Erro ao cancelar o agendamento.',
+                                'type' => 'error'
+                            ];
+                            header('Location: index.php');
+                        }
+                        exit();
+                        break;
+                    }
+
+
+
+
+
                 default:
                     echo "Ação não reconhecida.";
             }

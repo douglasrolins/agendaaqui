@@ -37,6 +37,7 @@ class IndexControl
                         // Exibe a página inicial sem estar logado
                         $view = new IndexView();
                         $view->exibirPaginaInicial();
+                        break;
                     }
             }
         }

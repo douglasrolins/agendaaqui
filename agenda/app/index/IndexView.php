@@ -39,7 +39,7 @@ class IndexView
                     <div class='col-md-6 text-center'>
 
             ";
-        echo "<h5 class='mb-4'>Olá, " . explode(' ', $_SESSION['user_name'])[0] . "</h5>";
+            
         if (isset($_SESSION['message'])) {
 
             $message = $_SESSION['message']['text'];
@@ -49,7 +49,7 @@ class IndexView
             $alertClass = ($messageType == 'success') ? 'alert-success' : 'alert-danger';
 
             echo "<div class='container mt-3'>";
-            echo "<div class='alert $alertClass text-center fw-bold fs-4' role='alert'>$message</div>";
+            echo "<div class='alert $alertClass text-center fw-bold fs-3' role='alert'>$message</div>";
             echo "</div>";
 
             // Limpa a mensagem após exibi-la
@@ -66,7 +66,7 @@ class IndexView
                         </a>";
 
         echo "<div class='mt-4'>
-                        <h5>Seus Agendamentos</h5>
+                        <h5>Próximos Agendamentos</h5>
                         <table class='table table-striped'>
                             <thead>
                                 <tr>
@@ -74,31 +74,97 @@ class IndexView
                                     <th>Horário</th>
                                     <th>Serviço</th>
                                     <th>Status</th> 
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>";
-        if (!$agendamentos) echo "<tr><td colspan='7'>Você não possui agendamentos!</td></tr>";
-        else {
+
+        $temProximos = false;
+        $temAnteriores = false;
+        $agendamentosAnteriores = [];
+
+        if (!$agendamentos) {
+            echo "<tr><td colspan='7'>Você não possui agendamentos!</td></tr>";
+        } else {
             foreach ($agendamentos as $index => $agendamento) {
-                // Obter a data e hora a partir do campo data_hora_inicio
                 $data = date("d/m/Y", strtotime($agendamento->getDataHoraInicio()));
                 $hora = date("H:i", strtotime($agendamento->getDataHoraInicio()));
                 $status = $agendamento->getStatus();
 
-                // Pegar o nome do serviço correspondente ao agendamento atual
+                // Obtém a data e hora do agendamento no formato DateTime
+                $dataHoraAgendamento = DateTime::createFromFormat("d/m/Y H:i", "$data $hora");
+
+                if ($dataHoraAgendamento !== false) {
+                    $timestampAgendamento = $dataHoraAgendamento->getTimestamp();
+                    $timestampAtual = time();
+
+                    // Verifica se já ocorreu
+                    if ($timestampAtual > $timestampAgendamento) {
+                        $status = "concluido";
+                        $agendamentosAnteriores[] = [
+                            'data' => $data,
+                            'hora' => $hora,
+                            'servicoNome' => $nomesServicos[$index] ?? "Nome do serviço não encontrado",
+                            'status' => $status
+                        ];
+                        $temAnteriores = true;
+                        continue; // Pula para o próximo loop e não exibe aqui
+                    } else {
+                        $temProximos = true;
+                    }
+                }
+
                 $servicoNome = $nomesServicos[$index] ?? "Nome do serviço não encontrado";
+                $badgeClass = $status == 'cancelado' ? 'badge bg-danger' : ($status == 'agendado' ? 'badge bg-primary' : 'badge bg-success');
 
                 echo "<tr>
-                        <td>{$data}</td>
-                        <td>{$hora}</td>
-                        <td>{$servicoNome}</td>
-                        <td>{$status}</td>
-                      </tr>";
+                                <td>{$data}</td>
+                                <td>{$hora}</td>
+                                <td>{$servicoNome}</td>
+                                <td><span class='$badgeClass'>" . ucfirst($status) . "</span></td>";
+
+                echo $status == 'agendado'
+                    ? "<td><a href='?control=agendamento&action=cancelar&agendamento_id={$agendamento->getId()}' class='btn btn-warning btn-sm' onclick='return cancelarAgendamento()'>Cancelar</a></td>"
+                    : "<td></td>";
+
+                echo "</tr>";
             }
+        }
+
+        if (!$temProximos) {
+            echo "<tr><td colspan='7'>Você não possui agendamentos futuros!</td></tr>";
         }
 
         echo "  </tbody>
                         </table>
-                      </div>";
+                    </div>";
+
+        if ($temAnteriores) {
+            echo "<div class='mt-4'>
+                            <h5>Agendamentos Anteriores</h5>
+                            <table class='table table-striped'>
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Horário</th>
+                                        <th>Serviço</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>";
+
+            foreach ($agendamentosAnteriores as $agendamento) {
+                echo "<tr>
+                                <td>{$agendamento['data']}</td>
+                                <td>{$agendamento['hora']}</td>
+                                <td>{$agendamento['servicoNome']}</td>
+                                <td><span class='badge bg-success'>" . ucfirst($agendamento['status']) . "</span></td>
+                              </tr>";
+            }
+
+            echo "  </tbody>
+                            </table>
+                        </div>";
+        }
     }
 }
