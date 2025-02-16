@@ -52,12 +52,16 @@ class IndexView
                             Gerenciar Serviços
                         </a>
 
+                        <a href='#' class='btn btn-info btn-lg btn-block mb-3'>
+                            Ver Agendamentos
+                        </a>
+
                         <a href='#' class='btn btn-success btn-lg btn-block mb-3'>
                             Gerenciar Funcionários
                         </a>
 
                         <a href='#' class='btn btn-warning btn-lg btn-block mb-3'>
-                            Gerenciar Agenda
+                            Configurar Agenda
                         </a>
 
                         <a href='#' class='btn btn-secondary btn-lg btn-block mb-3'>

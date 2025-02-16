@@ -1,5 +1,9 @@
 <?php
 include_once __DIR__ . '/IndexView.php';
+include_once __DIR__ . '/../database/Database.php';
+include_once __DIR__ . '/../agendamento/Agendamento.php';
+include_once __DIR__ . '/../../admin/servico/Servico.php';
+
 
 class IndexControl
 {
@@ -12,11 +16,28 @@ class IndexControl
         } else {
             // Lógica para ações GET
             switch ($action) {
+                    // utilizar outros actions futuramente (modificar perfil, cancelar agendamento por exemplo)
+
                 default:
-                    // Exibe a página inicial
-                    $view = new IndexView();
-                    $view->exibirPaginaInicial();
-                    break;
+                    //caso usuário logado, obter agendamentos realizados
+                    if (isset($_SESSION['user_id'])) {
+                        $idCliente = $_SESSION['user_id'];
+                        $agendamentos = Agendamento::agendamentosPorCliente($idCliente);
+
+                        $nomesServicos = [];
+                        foreach ($agendamentos as $agendamento) {
+                            $servico = Servico::getById($agendamento->getServicoId());
+                            $nomesServicos[] = $servico->getNome();
+                        }
+                        // Exibe a página inicial do cliente conectado
+                        $view = new IndexView();
+                        $view->exibirPaginaInicialConectado($agendamentos, $nomesServicos);
+                        break;
+                    } else {
+                        // Exibe a página inicial sem estar logado
+                        $view = new IndexView();
+                        $view->exibirPaginaInicial();
+                    }
             }
         }
     }

@@ -1,0 +1,235 @@
+<?php
+
+include_once __DIR__ . '../../database/Database.php';
+
+class Agendamento
+{
+    private $id;
+    private $data_hora_inicio;
+    private $data_hora_final;
+    private $status;
+    private $data_hora_cadastro;
+    private $tipo;
+    private $cliente_id;
+    private $servico_id;
+    private $funcionario_id;
+
+    public function __construct($id = null, $data_hora_inicio, $data_hora_final, $tipo, $cliente_id, $servico_id, $funcionario_id, $status = 'agendado')
+    {
+        $this->id = $id;
+        $this->data_hora_inicio = $data_hora_inicio;
+        $this->data_hora_final = $data_hora_final;
+        $this->tipo = $tipo;
+        $this->cliente_id = $cliente_id;
+        $this->servico_id = $servico_id;
+        $this->funcionario_id = $funcionario_id;
+        $this->status = $status;
+    }
+
+    // Métodos GET
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getDataHoraInicio()
+    {
+        return $this->data_hora_inicio;
+    }
+
+    public function getDataHoraFinal()
+    {
+        return $this->data_hora_final;
+    }
+
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    public function getClienteId()
+    {
+        return $this->cliente_id;
+    }
+
+    public function getServicoId()
+    {
+        return $this->servico_id;
+    }
+
+    public function getFuncionarioId()
+    {
+        return $this->funcionario_id;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    // Métodos SET
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function setDataHoraInicio($data_hora_inicio)
+    {
+        $this->data_hora_inicio = $data_hora_inicio;
+    }
+
+    public function setDataHoraFinal($data_hora_final)
+    {
+        $this->data_hora_final = $data_hora_final;
+    }
+
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+    }
+
+    public function setClienteId($cliente_id)
+    {
+        $this->cliente_id = $cliente_id;
+    }
+
+    public function setServicoId($servico_id)
+    {
+        $this->servico_id = $servico_id;
+    }
+
+    public function setFuncionarioId($funcionario_id)
+    {
+        $this->funcionario_id = $funcionario_id;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    // Cadastrar um novo agendamento
+    public function cadastrar()
+    {
+        $db = new Database();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare("INSERT INTO agendamento (data_hora_inicio, data_hora_final, tipo, cliente_id, servico_id, funcionario_id, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssss", $this->data_hora_inicio, $this->data_hora_final, $this->tipo, $this->cliente_id, $this->servico_id, $this->funcionario_id, $this->status);
+
+        if ($stmt->execute()) {
+            $this->id = $stmt->insert_id;
+            $stmt->close();
+            $db->closeConnection();
+            return true;
+        } else {
+            $stmt->close();
+            $db->closeConnection();
+            return false;
+        }
+    }
+
+    // Atualizar um agendamento existente
+    public function atualizar()
+    {
+        $db = new Database();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare("UPDATE agendamento SET data_hora_inicio = ?, data_hora_final = ?, tipo = ?, cliente_id = ?, servico_id = ?, funcionario_id = ?, status = ? WHERE id = ?");
+        $stmt->bind_param("sssssssi", $this->data_hora_inicio, $this->data_hora_final, $this->tipo, $this->cliente_id, $this->servico_id, $this->funcionario_id, $this->status, $this->id);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            $db->closeConnection();
+            return true;
+        } else {
+            $stmt->close();
+            $db->closeConnection();
+            return false;
+        }
+    }
+
+    // Apagar um agendamento
+    public function apagar()
+    {
+        $db = new Database();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare("DELETE FROM agendamento WHERE id = ?");
+        $stmt->bind_param("i", $this->id);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            $db->closeConnection();
+            return true;
+        } else {
+            $stmt->close();
+            $db->closeConnection();
+            return false;
+        }
+    }
+
+    // Obter todos os agendamentos de um cliente específico
+    public static function agendamentosPorCliente($cliente_id)
+    {
+        $db = new Database();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare("SELECT * FROM agendamento WHERE cliente_id = ?");
+        $stmt->bind_param("i", $cliente_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $agendamentosData = $result->fetch_all(MYSQLI_ASSOC);
+
+        $stmt->close();
+        $db->closeConnection();
+
+        $agendamentos = [];
+        foreach ($agendamentosData as $row) {
+            $agendamento = new Agendamento(
+                $row['id'],
+                $row['data_hora_inicio'],
+                $row['data_hora_final'],
+                $row['tipo'],
+                $row['cliente_id'],
+                $row['servico_id'],
+                $row['funcionario_id'],
+                $row['status']
+            );
+            $agendamentos[] = $agendamento;
+        }
+
+        return $agendamentos;
+    }
+
+    // Obter todos os agendamentos
+    public static function getAll()
+    {
+        $db = new Database();
+        $conn = $db->connect();
+
+        $query = "SELECT * FROM agendamento";
+        $result = $conn->query($query);
+        $agendamentos = $result->fetch_all(MYSQLI_ASSOC);
+
+        $db->closeConnection();
+        return $agendamentos;
+    }
+
+    // Obter um agendamento pelo ID
+    public static function getById($id)
+    {
+        $db = new Database();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare("SELECT * FROM agendamento WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $agendamento = $result->fetch_assoc();
+
+        $stmt->close();
+        $db->closeConnection();
+        return $agendamento;
+    }
+}
