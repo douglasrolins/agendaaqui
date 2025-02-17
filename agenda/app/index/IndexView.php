@@ -131,9 +131,9 @@ class IndexView
             }
         }
 
-        if (!$temProximos) {
-            echo "<tr><td colspan='7'>Você não possui agendamentos futuros!</td></tr>";
-        }
+         if (!$temProximos && $agendamentos) {
+             echo "<tr><td colspan='7'>Você não possui agendamentos futuros!</td></tr>";
+         }
 
         echo "  </tbody>
                         </table>
