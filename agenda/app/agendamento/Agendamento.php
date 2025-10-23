@@ -343,4 +343,89 @@ class Agendamento
 
         return $row ? $row['nome'] : 'Serviço desconhecido';
     }
+
+    public static function getHorariosDisponiveis($servicoId, $data)
+    {
+        $db = new Database();
+        $conn = $db->connect();
+
+        // Obter a duração do serviço selecionado
+        $stmtServico = $conn->prepare("SELECT duracao FROM servico WHERE id = ?");
+        $stmtServico->bind_param("i", $servicoId);
+        $stmtServico->execute();
+        $resultServico = $stmtServico->get_result();
+        $servico = $resultServico->fetch_assoc();
+
+        if (!$servico) {
+            return []; // Caso o serviço não exista
+        }
+
+        $duracaoServico = (int)$servico['duracao']; // duração em minutos
+
+        // Definir horário de funcionamento (exemplo: 08:00 - 18:00)
+        // TODO: parametrizar na configuração da empresa
+        $inicioExpediente = '08:00';
+        $fimExpediente = '18:00';
+        $intervalo = 30; // minutos entre os horários disponíveis
+
+        // Montar todos os horários possíveis para o dia informado
+        $horarios = [];
+        $inicio = strtotime("$data $inicioExpediente");
+        $fim = strtotime("$data $fimExpediente");
+
+        for ($t = $inicio; $t + ($duracaoServico * 60) <= $fim; $t += $intervalo * 60) {
+            $horarios[] = date('H:i', $t);
+        }
+
+        // Buscar todos os agendamentos com status 'agendado' para a data
+        //TODO: Necessário ajustar caso queira por serviço ou caso implementar vários funcionários
+        // Atualmente está como se fosse somente um funcionário
+        $stmt = $conn->prepare("
+        SELECT data_hora_inicio, data_hora_final 
+        FROM agendamento 
+        WHERE DATE(data_hora_inicio) = ? 
+        AND status = 'agendado'
+    ");
+        $stmt->bind_param("s", $data);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $ocupados = [];
+        while ($row = $result->fetch_assoc()) {
+            $ocupados[] = [
+                'inicio' => strtotime($row['data_hora_inicio']),
+                'fim' => strtotime($row['data_hora_final'])
+            ];
+        }
+
+        // Verificar conflito de horários
+        $disponiveis = [];
+
+        foreach ($horarios as $hora) {
+            $inicioCandidato = strtotime("$data $hora");
+            $fimCandidato = $inicioCandidato + ($duracaoServico * 60);
+            $conflito = false;
+
+            foreach ($ocupados as $ag) {
+                if (
+                    ($inicioCandidato >= $ag['inicio'] && $inicioCandidato < $ag['fim']) ||
+                    ($fimCandidato > $ag['inicio'] && $fimCandidato <= $ag['fim']) ||
+                    ($inicioCandidato <= $ag['inicio'] && $fimCandidato >= $ag['fim'])
+                ) {
+                    $conflito = true;
+                    break;
+                }
+            }
+
+            if (!$conflito) {
+                $disponiveis[] = date('H:i', $inicioCandidato);
+            }
+        }
+
+        $stmt->close();
+        $stmtServico->close();
+        $db->closeConnection();
+
+        return $disponiveis;
+    }
 }

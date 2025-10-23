@@ -6,8 +6,19 @@ session_start();
 // Inclui configurações da aplicação
 include_once '../config/appconfig.php';
 
+// Detecta se é uma requisição AJAX
+//$isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+function isAjax()
+{
+    $header = isset($_SERVER['HTTP_X_REQUESTED_WITH']) ? $_SERVER['HTTP_X_REQUESTED_WITH'] : null;
+    return ($header === 'XMLHttpRequest');
+}
+
 //Exibir o header
-include_once  '../static/header.php';
+//include_once  '../static/header.php';
+if (!isAjax()) {
+    include_once '../static/header.php';
+}
 
 // Aciona controlador
 
@@ -45,4 +56,7 @@ if (class_exists($controlClass)) {
 
 
 //Exibir o footer
-include_once '../static/footer.php';
+//include_once '../static/footer.php';
+if (!isAjax()) {
+    include_once '../static/footer.php';
+}

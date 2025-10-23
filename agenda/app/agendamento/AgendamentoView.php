@@ -37,7 +37,7 @@ class AgendamentoView
 
 
     // Exibir a tela de seleção de data e horário
-    function exibirSelecaoDataHora($servico, $horariosDisponiveis)
+    function exibirSelecaoDataHora($servico)
     {
         echo "
         <div class='container mt-4'>
@@ -61,19 +61,58 @@ class AgendamentoView
                 <input type='date' id='data' name='data' class='form-control' required>
 
                 <label for='hora' class='form-label mt-3'>Escolha o Horário:</label>
-                <select id='hora' name='hora' class='form-control' required>";
-
-        foreach ($horariosDisponiveis as $horario) {
-            echo "<option value='{$horario}'>{$horario}</option>";
-        }
-
-        echo "
+                <select id='hora' name='hora' class='form-select' required>
+                    <option value=''>Selecione uma data primeiro</option>
                 </select>
 
                 <button type='submit' class='btn btn-primary w-100 mt-3'>Avançar</button>
-                <a href='". BASE_URL ."/agenda/?control=agendamento&action=novo' class='btn btn-secondary w-100 mt-3'>Voltar</a>
+                <a href='" . BASE_URL . "/agenda/?control=agendamento&action=novo' class='btn btn-secondary w-100 mt-3'>Voltar</a>
             </form>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+            const dataInput = document.getElementById('data');
+            const horaSelect = document.getElementById('hora');
+            const servicoId = {$servico->getId()};
+
+            dataInput.addEventListener('change', function () {
+                const data = this.value;
+
+                if (data) {
+                    horaSelect.innerHTML = '<option>Carregando horários...</option>';
+
+                   fetch('" . BASE_URL . "/agenda/index.php?control=agendamento&action=ajax_getHorarios&servico_id=' + servicoId + '&data=' + data, {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(horarios => {
+                            horaSelect.innerHTML = '';
+
+                            if (Array.isArray(horarios) && horarios.length > 0) {
+                                horarios.forEach(hora => {
+                                    const option = document.createElement('option');
+                                    option.value = hora;
+                                    option.textContent = hora;
+                                    horaSelect.appendChild(option);
+                                });
+                            } else {
+                                horaSelect.innerHTML = '<option value=\"\">Nenhum horário disponível</option>';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro ao carregar horários:', error);
+                            horaSelect.innerHTML = '<option value=\"\">Erro ao carregar horários</option>';
+                        });
+                } else {
+                    horaSelect.innerHTML = '<option value=\"\">Selecione uma data primeiro</option>';
+                }
+            });
+        });
+    </script>
     </div>";
     }
 
@@ -94,7 +133,7 @@ class AgendamentoView
             </div>
             ";
 
-            echo "
+        echo "
             <div class='card p-4 shadow-lg'>
                 <h5>Serviço Selecionado: " . $servico->getNome() . "</h5>
                 <p><strong>Valor:</strong> R$ " . number_format($servico->getPreco(), 2, ',', '.') . "</p>

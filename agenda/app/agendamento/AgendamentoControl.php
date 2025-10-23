@@ -93,13 +93,34 @@ class AgendamentoControl
                 case 'escolherData':
                     if (isset($params['servico_id'])) {
                         $servicoId = Servico::getById($params['servico_id']);
-                        $horariosDisponiveis = $this->obterHorariosDisponiveis($servicoId);
+                        //$horariosDisponiveis = $this->obterHorariosDisponiveis($servicoId);
                         $view = new AgendamentoView();
-                        $view->exibirSelecaoDataHora($servicoId, $horariosDisponiveis);
+                        $view->exibirSelecaoDataHora($servicoId);
                     } else {
                         echo "Serviço não especificado.";
                     }
                     break;
+
+
+                case 'ajax_getHorarios':
+                    // Verifica se os parâmetros necessários foram enviados
+                    if (isset($_GET['servico_id']) && isset($_GET['data'])) {
+                        $servicoId = $_GET['servico_id'];
+                        $data = $_GET['data'];
+
+                        // Obtém os horários disponíveis
+                        $horarios = $this->obterHorariosDisponiveis($servicoId, $data);
+
+                        // Retorna em JSON para o JavaScript
+                        header('Content-Type: application/json');
+                        echo json_encode($horarios);
+                    } else {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Parâmetros ausentes.']);
+                    }
+                    exit;
+                    break;
+
 
                 case 'cancelar':
 
@@ -126,10 +147,6 @@ class AgendamentoControl
                         break;
                     }
 
-
-
-
-
                 default:
                     echo "Ação não reconhecida.";
             }
@@ -146,19 +163,21 @@ class AgendamentoControl
         return Servico::getById($id);
     }
 
-    public function obterHorariosDisponiveis($servicoId)
+    public function obterHorariosDisponiveis($servicoId, $data)
     {
-        //return Agendamento::getHorariosDisponiveis($servicoId);
-        $horariosDisponiveis = [
-            '08:00',
-            '09:00',
-            '10:00',
-            '11:00',
-            '14:00',
-            '15:00',
-            '16:00',
-            '17:00'
-        ];
+
+        // $horariosDisponiveis = [
+        //     '08:00',
+        //     '09:00',
+        //     '10:00',
+        //     '11:00',
+        //     '14:00',
+        //     '15:00',
+        //     '16:00',
+        //     '17:00'
+        // ];
+
+        $horariosDisponiveis = Agendamento::getHorariosDisponiveis($servicoId, $data);
         return $horariosDisponiveis;
     }
 }
